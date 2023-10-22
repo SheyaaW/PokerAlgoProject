@@ -4,4 +4,4 @@ The Game (In Unity) is currently in alpha version. Full functions, but may conta
 
 Made with Unity version 2021.3.26f1
 
-The completed play-in-terminal version is poker_99_final.py
+The completed play-in-terminal version is in Python/poker_terminal_100.py
