@@ -4,40 +4,87 @@ using UnityEngine;
 using System;
 using TMPro;
 using System.Threading.Tasks;
+using AustinHarris.JsonRpc;
 
 public class GameManager : MonoBehaviour
 {
-    private int cardsOnHand;
     public static GameManager Instance;
     public int playerBalance;
-    public int botBalance;
-    public int agentBalance;
     private int userBet;
-    private int botBet;
-    private int agentBet;
-    //public GameState State;
     public TMP_Text StatusMessage;
     [SerializeField] private TMP_Text potText;
     [SerializeField] private TMP_Text stateText;
     [SerializeField] private GameObject dealerButtonGameObject;
     [SerializeField] private TMP_Text BalanceAdditionText;
     [SerializeField] private TMP_Text PotAdditionText;
+    [SerializeField] private TMP_Text BalanceText;
     public bool playerTurnEnd = false;
     public int potMoney;
     public int formerPlayerBet;
     [SerializeField] private GameObject WinScene;
     [SerializeField] private GameObject LoseScene;
-    //public static event Action<GameState> OnGameStateChanged;
-    // private int currentPlayerIndex = 0;
-    // public string currentPlayer;
-    private string[] players = { "Player", "Bot", "Agent" };
+    public bool wantToRestart = false;
+    class Rpc : JsonRpcService
+    {
+        GameManager gameManager;
+        ButtonManager buttonManager;
+        SoundEffect soundEffect;
+        public Rpc(GameManager gameManager)
+        {
+            this.gameManager = gameManager;
+        }
+
+        [JsonRpcMethod]
+        public void GetPot(string pot_amount)
+        {
+            //Debug.Log(pot_amount);
+
+            gameManager.potMoney = int.Parse(pot_amount);
+            gameManager.UpdatePotText(gameManager.potMoney);
+        }
+
+        [JsonRpcMethod]
+        public void WhoWon(string winner)
+        {
+            Debug.Log($"Winner is {winner}");
+            gameManager.StatusMessage.text = winner + " won!";
+            if (winner == "Player")
+            {
+                gameManager.WinScene.SetActive(true);
+                soundEffect.WinSound();
+            }
+            else
+            {
+                gameManager.LoseScene.SetActive(true);
+                soundEffect.LoseSound();
+            }
+        }
+        [JsonRpcMethod]
+        public int SendPlayerBet(int bet)
+        {
+            return bet;
+        }
+    }
+
+    Rpc rpc;
+
+    private void Start()
+    {
+        playerBalance = 100;
+        rpc = new Rpc(this);
+        BalanceText.text = "Balance: $" + playerBalance.ToString();
+    }
 
     private void Awake()
     {
         Instance = this;
-        playerBalance = 100; // Set the balance to 1000
-        botBalance = 100; // Set the balance to 1000
-        agentBalance = 100; // Set the balance to 1000
+    }
+    public void UpdatePotText(int amountPot)
+    {
+        potText.text = "Pot: $" + amountPot.ToString();
+        PotAdditionText.color = Color.green;
+        PotAdditionText.text = "+$" + amountPot.ToString();
+        StartCoroutine(Delay(2F));
     }
 
 
@@ -71,13 +118,16 @@ public class GameManager : MonoBehaviour
             userBet = bet;
             playerBalance -= bet;
             potMoney += bet;
+            BalanceText.text = "Balance: $" + playerBalance.ToString();
             playerTurnEnd = true; //End turn
+            rpc.SendPlayerBet(userBet);
             return playerBalance;
         }
         return playerBalance;
     }
 
-    public int AgentRaise(int agentBet){
+    public int AgentRaise(int agentBet)
+    {
         if (agentBet < (formerPlayerBet * 2))
         {
             StatusMessage.text = "Invalid Raise";
@@ -86,17 +136,18 @@ public class GameManager : MonoBehaviour
         return agentBet;
     }
 
-    private void Showdown()
-    {
-        if (playerBalance > botBalance && playerBalance > agentBalance)
-        {
-            WinScene.SetActive(true);
-        }
-        else if (botBalance > playerBalance && botBalance > agentBalance)
-        {
-            LoseScene.SetActive(true);
-        }
-    }
+    // private void Showdown()
+    // {
+    //     if (playerBalance > botBalance && playerBalance > agentBalance)
+    //     {
+    //         WinScene.SetActive(true);
+    //     }
+    //     else if (botBalance > playerBalance && botBalance > agentBalance)
+    //     {
+    //         LoseScene.SetActive(true);
+    //     }
+    // }
+
     IEnumerator Delay(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
@@ -104,4 +155,7 @@ public class GameManager : MonoBehaviour
         BalanceAdditionText.text = "";
         PotAdditionText.text = "";
     }
+
+
+
 }

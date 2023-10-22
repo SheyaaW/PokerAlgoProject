@@ -191,7 +191,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42f181b92b623f34ba288986e4a64cf8, type: 2}
+  - {fileID: 2100000, guid: ad4bd96b207ac794884cf2301ede3848, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1188,6 +1188,7 @@ MonoBehaviour:
   CurrentBalance: {fileID: 394793040}
   Stage: {fileID: 1332016280}
   Pot: {fileID: 1523570621}
+  PlayerAction: 
 --- !u!1 &250347063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1641,7 +1642,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42f181b92b623f34ba288986e4a64cf8, type: 2}
+  - {fileID: 2100000, guid: ad4bd96b207ac794884cf2301ede3848, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2393,8 +2394,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b324a4685d480b346b084e8a5dbacbde, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -5288,7 +5289,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42f181b92b623f34ba288986e4a64cf8, type: 2}
+  - {fileID: 2100000, guid: ad4bd96b207ac794884cf2301ede3848, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5716,7 +5717,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42f181b92b623f34ba288986e4a64cf8, type: 2}
+  - {fileID: 2100000, guid: ad4bd96b207ac794884cf2301ede3848, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6142,7 +6143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42f181b92b623f34ba288986e4a64cf8, type: 2}
+  - {fileID: 2100000, guid: ad4bd96b207ac794884cf2301ede3848, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8674,7 +8675,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1332016280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9342,7 +9343,7 @@ AudioSource:
   m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
-  Mute: 1
+  Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -10444,19 +10445,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBalance: 0
-  botBalance: 0
-  agentBalance: 0
   StatusMessage: {fileID: 820679273}
   potText: {fileID: 1523570621}
   stateText: {fileID: 1332016280}
   dealerButtonGameObject: {fileID: 960965887}
   BalanceAdditionText: {fileID: 1869841006}
   PotAdditionText: {fileID: 1703269743}
+  BalanceText: {fileID: 394793040}
   playerTurnEnd: 0
   potMoney: 0
   formerPlayerBet: 0
   WinScene: {fileID: 1864710560}
   LoseScene: {fileID: 427007514}
+  wantToRestart: 0
 --- !u!4 &1567349271
 Transform:
   m_ObjectHideFlags: 0
@@ -11045,7 +11046,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731580260}
-  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.35999972, y: 8.485395, z: -4.65}
   m_LocalScale: {x: 0.19999999, y: 0.01, z: 0.19999999}
   m_ConstrainProportionsScale: 0

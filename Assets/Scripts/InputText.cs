@@ -15,6 +15,7 @@ public class InputText : MonoBehaviour
             return; // Do nothing if input has already been used
         }
         inputBet = int.Parse(money); // string to int
+        ButtonManager.Instance.PlayerAction = "raise";
         GameManager.Instance.GetBetAmount(inputBet); //Get the bet amount from the input field
     }
     IEnumerator Delay(float time) // Delay the StatusMessage text

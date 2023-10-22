@@ -14,13 +14,8 @@ public class ButtonManager : MonoBehaviour
     [SerializeField] private TMP_Text Stage;
     [SerializeField] private TMP_Text Pot;
     private string agentInputAction;
-    private string lastAction = "Nothing";
-
-    void Update() // Update text
-    {
-        CurrentBalance.text = "Balance: $" + GameManager.Instance.playerBalance.ToString();
-        Pot.text = "Pot: $" + GameManager.Instance.potMoney.ToString();
-    }
+    public string PlayerAction = "Nothing";
+    public static ButtonManager Instance;
 
     public void Call() // Call button
     {
@@ -30,8 +25,12 @@ public class ButtonManager : MonoBehaviour
             StartCoroutine(Delay(2F));
             return;
         }
-        GameManager.Instance.playerTurnEnd = true;
-        lastAction = "Call";
+        else
+        {
+            PlayerAction = "call";
+            GameManager.Instance.playerBalance -= GameManager.Instance.formerPlayerBet;
+            GameManager.Instance.playerTurnEnd = true;
+        }
     }
     public void Fold() // fold button
     {
@@ -41,8 +40,11 @@ public class ButtonManager : MonoBehaviour
             StartCoroutine(Delay(2F));
             return;
         }
-        GameManager.Instance.playerTurnEnd = true;
-        lastAction = "Fold";
+        else
+        {
+            GameManager.Instance.playerTurnEnd = true;
+            PlayerAction = "fold";
+        }
     }
 
     public void Check()
@@ -53,8 +55,11 @@ public class ButtonManager : MonoBehaviour
             StartCoroutine(Delay(2F));
             return;
         }
-        GameManager.Instance.playerTurnEnd = true;
-        lastAction = "Check";
+        else
+        {
+            GameManager.Instance.playerTurnEnd = true;
+            PlayerAction = "check";
+        }
     }
 
 
@@ -70,50 +75,59 @@ public class ButtonManager : MonoBehaviour
         [JsonRpcMethod]
         public string GetAction()
         {
-            return buttonManager.lastAction;
+            return buttonManager.PlayerAction;
         }
+        // [JsonRpcMethod]
+        // public void InputAgentAction(string action)
+        // {
+        //     buttonManager.agentInputAction = action;
+        //     switch (action)
+        //     {
+        //         case "Call":
+        //             buttonManager.Call();
+        //             Debug.Log("Call");
+        //             break;
+        //         case "Fold":
+        //             buttonManager.Fold();
+        //             Debug.Log("Fold");
+        //             break;
+        //         case "Check":
+        //             buttonManager.Check();
+        //             Debug.Log("Check");
+        //             break;
+        //         case "Raise":
+        //             Debug.Log("Raise");
+        //             //gameManager.AgentRaise(2 * gameManager.Instance.formerPlayerBet);
+        //             break;
+        //         default:
+        //             Debug.Log("Invalid action");
+        //             break;
+        //     }
+        // }
         [JsonRpcMethod]
-        public void InputAgentAction(string action)
+        public bool RestartGame(bool state)
         {
-            buttonManager.agentInputAction = action;
-            switch (action)
-            {
-                case "Call":
-                    buttonManager.Call();
-                    Debug.Log("Call");
-                    break;
-                case "Fold":
-                    buttonManager.Fold();
-                    Debug.Log("Fold");
-                    break;
-                case "Check":
-                    buttonManager.Check();
-                    Debug.Log("Check");
-                    break;
-                case "Raise":
-                    Debug.Log("Raise");
-                    gameManager.AgentRaise(2 * GameManager.Instance.formerPlayerBet);
-                    break;
-                default:
-                    Debug.Log("Invalid action");
-                    break;
-            }
+            return state;
         }
     }
 
     Rpc rpc;
     private void Start()
     {
+        Instance = this;
         rpc = new Rpc(this);
     }
 
     public void Restart() // Restart button
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        rpc.RestartGame(GameManager.Instance.wantToRestart = true);
+        //GameManager.Instance..text = "";
     }
     IEnumerator Delay(float delayTime) // delay
     {
         yield return new WaitForSeconds(delayTime);
         GameManager.Instance.StatusMessage.text = "";
+        // CurrentBalance.text = "Balance: $" + GameManager.Instance.playerBalance.ToString();
     }
 }

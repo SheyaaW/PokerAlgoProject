@@ -4,9 +4,7 @@ import argparse
 def run(args: argparse.Namespace) -> None:
     unity_comms = UnityComms(port=args.port)
     res = unity_comms.GetAction()
-    print("Action:", res)
-    #print("Type of Action:", type(res))
-    
+    print(res)
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
